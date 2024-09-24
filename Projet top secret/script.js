@@ -12,6 +12,15 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
 function createPlayer() {
     // Get all player informations
     playerName = document.getElementById('nom').value.replace(/\|/g, '');
@@ -56,6 +65,8 @@ function displayCreatePlayerPopup() {
 }
 
 function displayDicePopup() {
+    playerName = document.getElementById('playerName');
+    playerName.innerHTML = 'A <span style="color: ' + currentPlayer.Color + '">' + currentPlayer.Name + '</span> de jouer !';
     formulaire = document.getElementsByClassName('form')[1];
     formulaire.style.display = 'flex';
     formulaire.style.transform = 'translate(-50%, -50%) scale(0)';
@@ -64,13 +75,31 @@ function displayDicePopup() {
     }, 10);
 }
 
-function hidePopup(formNb) {
+function displayTilePopup(tileNb) {
+    var rgbPlayerColor = hexToRgb(currentPlayer.Color);
+    var rgbString = rgbPlayerColor.r + ', ' + rgbPlayerColor.g + ', ' + rgbPlayerColor.b;
+    formulaire = document.getElementsByClassName('form')[2];
+    formulaire.style.display = 'flex';
+    formulaire.style.width = '600px';
+    formulaire.style.height = '480px';
+    formulaire.style.transform = 'translate(-50%, -50%) scale(0)';
+    formulaire.style.backgroundImage = "url('./img/" + tileNb + ".png')";
+    formulaire.style.backgroundSize = "cover";
+    formulaire.style.boxShadow = "rgba(" + rgbString + ", 0.25) 0 -50px 36px -28px inset, rgba(" + rgbString + ", 0.25) 0 2px 4px, rgba(" + rgbString + ", 0.25) 0 4px 8px, rgba(" + rgbString + ", 0.25) 0 8px 16px, rgba(" + rgbString + ", 0.25) 0 16px 32px, rgba(" + rgbString + ", 0.25) 0 32px 64px";
+    setTimeout(() => {
+        formulaire.style.transform = 'translate(-50%, -50%) scale(1)';
+    }, 10);
+}
+
+function hidePopup(formNb, bouton) {
     formulaire = document.getElementsByClassName('form')[formNb];
     formulaire.style.transform = 'translate(-50%, -50%) scale(0)';
     setTimeout(() => {
         formulaire.style.display = 'none';
+        if (formNb == 1) {
+            bouton.disabled = false;
+        }
     }, 250);
-
 }
 
 function rollDice() {
@@ -90,10 +119,9 @@ function rollDice() {
     var bouton = document.getElementById('boutonLance');
     bouton.disabled = true;
     setTimeout(() => {
-        hidePopup(1);
-        bouton.disabled = false;
+        hidePopup(1, bouton);
         endTurn(diceOne);
-    }, 3000); // Réinitialise après 1 seconde
+    }, 3000); // Réinitialise après 3 seconde
 }
 
 function onlyRollDice(number) {
@@ -111,7 +139,7 @@ function onlyRollDice(number) {
 
 function deletePlayerFromCurrentTile(player) {
     // Get the current player tile
-    currentTile = document.getElementsByClassName('tile')[player.CurrentTile];
+    currentTile = document.getElementById(player.CurrentTile);
     console.log(currentTile.getAttribute('data-tooltip'));
 
     //Remove his name from it
@@ -156,8 +184,16 @@ function playAnimation(playerColor, startTileNumber, endTileNumber) {
     let currentTileNumber = startTileNumber;
 
     function animateTile() {
-        if (currentTileNumber > endTileNumber) return;
-
+        if (currentTileNumber > endTileNumber) {
+            setTimeout(() => {
+                // Display tile in full screen
+                displayTilePopup(currentTileNumber);
+                setTimeout(() => {
+                    hidePopup(2);
+                }, 3000);
+            }, 1000);
+            return;
+        }
         const currentTile = document.getElementById(currentTileNumber);
 
         // Sauvegarder l'ancien style
@@ -187,9 +223,9 @@ function playAnimation(playerColor, startTileNumber, endTileNumber) {
 function play() {
     turnPlaying = true;
     console.log('Le tour a commencé');
-
     // Locate player based on the turn
     currentPlayer = players[turnNb % players.length];
+
     // Affiche une popup pour lancer le dé
     displayDicePopup();
 }
