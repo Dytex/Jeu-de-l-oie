@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu de l'oie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="form">
+        <div class="container">
+            <label for="nom">Nom:</label>
+            <input id="nom" class="input" name="nom" type="text">
+            <br><br>
+            <label for="couleur">Choisissez une couleur :</label>
+            <input type="color" id="couleur" name="couleur" value="#ff0000">
+            <br> <br>
+            <input class="button-33 validation" type="submit" onclick="createPlayer()" value="Confirmer"><input class="button-33 validation" type="submit" onclick="hidePopup(0, '',true)" value="Annuler">
+        </div>
+    </div>
+    <div class="form">
+        <div class="container-dice">
+            <div id="playerName" style="color: white; font-size: 31px;"></div>
+            <div id='dice1' class="dice dice-one">
+                <div id="dice-one-side-one" class='side one'>
+                    <div class="dot one-1"></div>
+                </div>
+                <div id="dice-one-side-two" class='side two'>
+                    <div class="dot two-1"></div>
+                    <div class="dot two-2"></div>
+                </div>
+                <div id="dice-one-side-three" class='side three'>
+                    <div class="dot three-1"></div>
+                    <div class="dot three-2"></div>
+                    <div class="dot three-3"></div>
+                </div>
+                <div id="dice-one-side-four" class='side four'>
+                    <div class="dot four-1"></div>
+                    <div class="dot four-2"></div>
+                    <div class="dot four-3"></div>
+                    <div class="dot four-4"></div>
+                </div>
+                <div id="dice-one-side-five" class='side five'>
+                    <div class="dot five-1"></div>
+                    <div class="dot five-2"></div>
+                    <div class="dot five-3"></div>
+                    <div class="dot five-4"></div>
+                    <div class="dot five-5"></div>
+                </div>
+                <div id="dice-one-side-six" class='side six'>
+                    <div class="dot six-1"></div>
+                    <div class="dot six-2"></div>
+                    <div class="dot six-3"></div>
+                    <div class="dot six-4"></div>
+                    <div class="dot six-5"></div>
+                    <div class="dot six-6"></div>
+                </div>
+            </div>
+            <input id="boutonLance" class="button-33 validation" type="submit " onclick="rollDice(); " value="Lancer le dé !" readonly>
+        </div>
+    </div>
+    <div class="form"></div>
+    <div class="form" id="winContainer">
+        <div class="description" id="winPopup"></div>
+        <input class="button-33 replay" type="submit " onclick="replay()" value="Rejouer 😈" readonly>
+        <input class="button-33 " id="close" type="submit " onclick="hidePopup(3)" value="En finir avec ce jeu 😇" readonly>
+    </div>
+    <div class="form action">
+        <div class="description short-text" id="chooseAction"></div>
+        <input class="button-33 replay choosing" type="submit " onclick="replayTurn()" value="Rejouer 😈" readonly>
+        <input class="button-33 choosing" id="back" type="submit " onclick="backupTiles()" value="Reculer de 2 cases 😇" readonly>
+    </div>
+    <div class="form action">
+        <div class="description short-text" id="choice"></div>
+    </div>
+    <input class="button-33 " id="addPlayer" type="submit " onclick="displayCreatePlayerPopup() " value="Ajouter un joueur" readonly>
+    <div class="board">
+        <div class="row">
+            <div class="tile special-tooltip" id="0" style="background-image: url('./img/1.png'); background-size: cover;" data-tooltip="Personne ici">
+                <div class="depart"></div>
+            </div>
+            <div class="tile" id="1" style="background-image: url('./img/2.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="2" style="background-image: url('./img/3.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="3" style="background-image: url('./img/4.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="4" style="background-image: url('./img/5.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="5" style="background-image: url('./img/6.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="6" style="background-image: url('./img/7.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="29" style="background-image: url('./img/30.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="30" style="background-image: url('./img/31.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="31" style="background-image: url('./img/32.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="32" style="background-image: url('./img/33.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+        <div class="row ">
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="tile " id="7" style="background-image: url('./img/8.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none "></div>
+            <div class="none"></div>
+            <div class="tile" id="28" style="background-image: url('./img/29.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="33" style="background-image: url('./img/34.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+        <div class="row ">
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="tile " id="8" style="background-image: url('./img/9.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none "></div>
+            <div class="none"></div>
+            <div class="tile" id="27" style="background-image: url('./img/28.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="34" style="background-image: url('./img/35.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+        <div class="row ">
+            <div class="none "></div>
+            <div class="tile " id="14" style="background-image: url('./img/15.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="13" style="background-image: url('./img/14.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="12" style="background-image: url('./img/13.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="11" style="background-image: url('./img/12.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="10" style="background-image: url('./img/11.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="9" style="background-image: url('./img/10.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none "></div>
+            <div class="none"></div>
+            <div class="tile" id="26" style="background-image: url('./img/27.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="35" style="background-image: url('./img/36.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+        <div class="row ">
+            <div class="none "></div>
+            <div class="tile " id="15" style="background-image: url('./img/16.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none"></div>
+            <div class="tile" id="25" style="background-image: url('./img/26.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="36" style="background-image: url('./img/37.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+        <div class="row ">
+            <div class="none "></div>
+            <div class="tile " id="16" style="background-image: url('./img/17.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="17" style="background-image: url('./img/18.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="18" style="background-image: url('./img/19.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="19" style="background-image: url('./img/20.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="20" style="background-image: url('./img/21.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="21" style="background-image: url('./img/22.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="22" style="background-image: url('./img/23.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile " id="23" style="background-image: url('./img/24.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="tile" id="24" style="background-image: url('./img/25.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="37" style="background-image: url('./img/38.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+        <div class="row ">
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none "></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="none"></div>
+            <div class="tile" id="38" style="background-image: url('./img/39.png'); background-size: cover;" data-tooltip="Personne ici"></div>
+        </div>
+    </div>
+
+</body>
+<script src="script.js "></script>
+
+</html>
