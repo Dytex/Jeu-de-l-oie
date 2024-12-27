@@ -1,6 +1,5 @@
 players = [];
 gameDifficulty = 'hard';
-numberOfPlayers = 0;
 turnPlaying = false;
 gameEnded = false;
 creatingPlayer = false;
@@ -301,6 +300,32 @@ function setPlayerTile(player, nombre) {
 
 }
 
+function setPlayerTileToStart(player) {
+    // Get the current player tile
+    oldTileNumber = player.CurrentTile;
+    player.CurrentTile = 0;
+    nextTileNumber = 0;
+    var doExcedingAnimation = false;
+    // Get next tile
+    nextTile = document.getElementById(player.CurrentTile);
+
+    // Si personne n'est sur la case remplacer le nom par celui du joueur
+    if (nextTile.getAttribute('data-tooltip') == 'Personne ici') {
+        nextTile.setAttribute('data-tooltip', player.Name);
+    } else {
+        oldPlusPlayer = nextTile.getAttribute('data-tooltip') + ' | ' + player.Name;
+        nextTile.setAttribute('data-tooltip', oldPlusPlayer);
+    }
+
+    // Ajouter son pion dessus
+    var playerPoint = document.createElement('div');
+    playerPoint.className = 'point';
+    playerPoint.style.backgroundColor = player.Color;
+    playerPoint.id = player.Name;
+    nextTile.appendChild(playerPoint);
+}
+
+
 function setPlayerExactTile(player, nombre) {
     // Get the current player tile
     oldTileNumber = player.CurrentTile;
@@ -549,6 +574,49 @@ function replayTurn() {
     setTimeout(() => {
         displayDicePopup();
     }, 250);
+}
+
+function shuffle(array) {
+    let currentIndex = array.length;
+
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+
+        // Pick a remaining element...
+        let randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]
+        ];
+    }
+}
+
+function replay() {
+    // Fermer la popup de victoire
+    hidePopup(3);
+
+    // Mettre les personnes dans un ordre aléatoire sur la case départ
+    shuffle(players);
+
+    // Les positionner sur la case départ
+    for (let i = 0; i < players.length; i++) {
+        const player = players[i];
+        deletePlayerFromCurrentTile(player);
+        setPlayerTileToStart(player);
+    }
+
+    // Scroll to start Tile
+    var firstTile = document.getElementById('0');
+    firstTile.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Set the game vars to init
+    turnPlaying = false;
+    gameEnded = false;
+    creatingPlayer = false;
+    turnNb = 0;
+    jet = 0;
 }
 
 function play() {
