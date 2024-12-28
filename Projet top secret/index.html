@@ -74,7 +74,11 @@
     <div class="form action">
         <div class="description short-text" id="choice"></div>
     </div>
-    <input class="button-33 " id="addPlayer" type="submit " onclick="displayCreatePlayerPopup() " value="Ajouter un joueur" readonly>
+    <div id="addPlayer">
+        <input class="button-33 " type="submit " onclick="displayCreatePlayerPopup() " value="Ajouter un joueur" readonly>
+        <span class="button-33" id="difficulty" onclick="changeDifficulty()">Difficulté : <span id="gameDifficulty">Difficile 😈</span></span>
+    </div>
+
     <div class="board">
         <div class="row">
             <div class="tile special-tooltip" id="0" style="background-image: url('./img/1.png'); background-size: cover;" data-tooltip="Personne ici">

@@ -22,6 +22,21 @@ function hexToRgb(hex) {
     } : null;
 }
 
+function changeDifficulty() {
+    if (gameDifficulty == 'hard') {
+        gameDifficulty = 'easy';
+        difficultyText = document.getElementById('gameDifficulty');
+        difficultyText.innerHTML = 'Facile 😇';
+        difficultyText.style.color = 'blue';
+    } else {
+        gameDifficulty = 'hard';
+        difficultyText = document.getElementById('gameDifficulty');
+        difficultyText.innerHTML = 'Difficile 😈';
+        difficultyText.style.color = 'red';
+    }
+    console.log('Difficulty changed to : ' + gameDifficulty);
+}
+
 function createPlayer() {
     // Get all player informations
     playerName = document.getElementById('nom').value.replace(/\|/g, '');
@@ -182,14 +197,17 @@ function rollDice(turnNotPlayed, actionNb) {
     var diceOne = Math.floor((Math.random() * 6) + 1);
     var elDiceOne = document.getElementById('dice1');
 
-    console.log('Dice One: ' + diceOne);
-
-    for (var i = 1; i <= 6; i++) {
-        elDiceOne.classList.remove('show-' + i);
-        if (diceOne === i) {
-            elDiceOne.classList.add('show-' + i);
-        }
+    if (elDiceOne.className == 'dice dice-one show-' + diceOne) {
+        // faire un roll intermédiaire
+        newDiceOne = (diceOne + 1) % 6;
+        elDiceOne.className = 'dice dice-one show-' + newDiceOne;
+        setTimeout(() => {
+            elDiceOne.className = 'dice dice-one show-' + diceOne;
+        }, 250);
+    } else {
+        elDiceOne.className = 'dice dice-one show-' + diceOne;
     }
+
 
     var bouton = document.getElementById('boutonLance');
     bouton.disabled = true;
